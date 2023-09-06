@@ -3,6 +3,7 @@ const cors = require("cors");
 const fileUpload = require("./middlewares/fileUpload");
 const errorHandler = require("./middlewares/errorHandler");
 const { apiLogger, errorLogger } = require("./utils/logger");
+const extractor = require("./utils/extractor");
 
 // init server and middleware
 const app = express();
@@ -18,7 +19,15 @@ app.post("/api/upload", fileUpload.single("image"), async (req, res, next) => {
         next(new Error("Image required"));
     }
 
-    // TODO: implement img recognition logic here
+    try {
+        const result = await extractor(img.path);
+        res.status(200).json({
+            result,
+        });
+    } catch (error) {
+        errorLogger.log("Error occured during extraction, message: ", error.message);
+        console.log(error);
+    }
 });
 
 // error handler

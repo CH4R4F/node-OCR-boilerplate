@@ -6,14 +6,11 @@ const multer = require("multer");
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(error, __dirname + "/../uploads"); // you can customize tmp file here
+        cb(null, __dirname + "/../uploads"); // you can customize tmp file here
     },
     filename: (req, file, cb) => {
-        // here you can modify on the name of the uploaded image
-        const name = file.originalname.toLocaleLowerCase().split(" ").join("-");
-        const ext = MIME_TYPE_MAP[file.mimetype];
-        cb(null, name + "-" + Date.now() + "." + ext);
-    },
+    cb(null, Date.now() + "-" + file.originalname);
+  },
 });
 
 const fileUpload = multer({
