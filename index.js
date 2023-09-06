@@ -27,6 +27,7 @@ app.post("/api/upload", fileUpload.single("image"), async (req, res, next) => {
     } catch (error) {
         errorLogger.log("Error occured during extraction, message: ", error.message);
         console.log(error);
+        next(error);
     }
 });
 
